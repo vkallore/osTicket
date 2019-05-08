@@ -190,6 +190,8 @@ extends SessionBackend {
         }
         catch (DoesNotExist $e) {
             $this->data = new SessionData(['session_id' => $id]);
+            // Added as per comment @ https://github.com/osTicket/osTicket/issues/4262#issuecomment-386066797
+            $this->data->session_data = "";
         }
         catch (OrmException $e) {
             return false;
