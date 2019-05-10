@@ -190,6 +190,7 @@ extends SessionBackend {
         }
         catch (DoesNotExist $e) {
             $this->data = new SessionData(['session_id' => $id]);
+            // Avoid CSRF issue fix for PHP 7.1+
             // Added as per comment @ https://github.com/osTicket/osTicket/issues/4262#issuecomment-386066797
             $this->data->session_data = "";
         }
