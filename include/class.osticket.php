@@ -364,13 +364,22 @@ class osTicket {
     }
 
     function get_path_info() {
-        if(isset($_SERVER['PATH_INFO']))
+        if(isset($_SERVER['PATH_INFO']) && !empty($_SERVER['PATH_INFO']))
             return $_SERVER['PATH_INFO'];
 
         if(isset($_SERVER['ORIG_PATH_INFO']))
             return $_SERVER['ORIG_PATH_INFO'];
 
-        //TODO: conruct possible path info.
+        /* NGINX Needed this block !*/
+        if(strpos($_SERVER["SERVER_SOFTWARE"], 'nginx') !== false) {
+            $path_info = substr($_SERVER['REQUEST_URI'], strlen($_SERVER['SCRIPT_NAME']));
+            if (strpos($path_info, '?') !== false) {
+                $path_info = substr($path_info, 0, strpos($path_info, "?"));
+            }
+            if (isset($path_info[0]) && $path_info[0] == '/') {
+                return $path_info;
+            }
+        }
 
         return null;
     }
